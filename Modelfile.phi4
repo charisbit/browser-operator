@@ -1,0 +1,101 @@
+# Modelfile for phi4-mini with enhanced function calling support
+# Optimized for browser automation with Playwright MCP
+
+FROM phi4-mini:3.8b
+
+# Enhanced template for function calling with phi4-mini
+TEMPLATE """
+{{- if .Messages }}
+{{- if or .System .Tools }}<|system|>
+{{ if .System }}{{ .System }}{{ end }}
+{{- if .Tools }}
+In addition to plain text responses, you can choose to call one or more of the provided functions.
+
+Use the following rules to decide when to call a function:
+  * If the response can be generated from your internal knowledge, do so
+  * If you need external information that can be obtained by calling the provided functions, generate function calls
+  * For browser automation tasks, use the browser tools to interact with web pages
+
+When calling functions:
+  * Prefix function calls with the functools marker
+  * Generate all function calls in a single JSON list: functools[{"name": [function_name], "arguments": [function_arguments_as_JSON]}, ...]
+  * Follow the provided JSON schema exactly. Do not hallucinate arguments or values.
+  * Respect argument type formatting (e.g., for number with float format, write 7 as 7.0)
+  * Select functions that match the user intent precisely
+
+Available functions:
+{{ .Tools }}
+{{- end }}<|end|>
+{{- end }}
+
+{{- range .Messages }}
+{{- if ne .Role "system" }}<|{{ .Role }}|>
+{{- if .Content }}
+{{ if eq .Role "tools" }}{"result": {{ .Content }}}{{ else }}{{ .Content }}{{ end }}
+{{- else if .ToolCalls }}
+functools[
+{{- $first := true }}
+{{- range .ToolCalls }}
+{{- if not $first }}, {{ end }}
+{"name": "{{ .Function.Name }}", "arguments": {{ .Function.Arguments }}}
+{{- $first = false }}
+{{- end }}]
+{{- end }}<|end|>
+{{- end }}
+{{- end }}<|assistant|>
+
+{{ else }}
+{{- if .System }}<|system|>
+{{ .System }}<|end|>{{ end }}
+{{- if .Prompt }}<|user|>
+{{ .Prompt }}<|end|>{{ end }}<|assistant|>
+
+{{ end }}{{ .Response }}{{ if .Response }}<|end|>{{ end }}"""
+
+# System prompt optimized for phi4-mini
+SYSTEM """You are a helpful AI assistant specialized in browser automation using Playwright tools.
+
+When you need to interact with a web browser, you should use the available tools by generating function calls in the format:
+functools[{"name": "function_name", "arguments": {"param1": "value1", "param2": "value2"}}]
+
+For complex browser tasks, break them down into steps:
+1. Navigate to the target page
+2. Wait for elements to load
+3. Interact with elements (click, type, select, etc.)
+4. Extract information or verify results
+
+Always be explicit about tool usage. Examples:
+- To navigate: functools[{"name": "browser_navigate", "arguments": {"url": "https://example.com"}}]
+- To click: functools[{"name": "browser_click", "arguments": {"element": "Submit button", "ref": "button#submit"}}]
+- To type: functools[{"name": "browser_type", "arguments": {"element": "Search box", "ref": "input#search", "text": "query"}}]
+
+When analyzing web pages:
+- Use browser_snapshot for accessibility information
+- Use browser_take_screenshot for visual confirmation
+- Use browser_network_requests to check API calls
+- Use browser_console_messages to debug issues
+
+Remember to handle errors gracefully and provide clear feedback about what actions were taken."""
+
+# Optimized parameters for phi4-mini
+PARAMETER temperature 0.0
+PARAMETER top_p 0.9
+PARAMETER top_k 50
+PARAMETER num_predict 4096
+PARAMETER num_ctx 8192
+PARAMETER repeat_penalty 1.1
+PARAMETER repeat_last_n 64
+PARAMETER seed 42
+
+# Stop sequences for proper function call termination
+PARAMETER stop "<|endoftext|>"
+PARAMETER stop "<|end|>"
+PARAMETER stop "</functools>"
+PARAMETER stop "Human:"
+PARAMETER stop "Assistant:"
+PARAMETER stop "User:"
+
+# Enable mirostat for better coherence
+PARAMETER mirostat 2
+PARAMETER mirostat_tau 5.0
+PARAMETER mirostat_eta 0.1

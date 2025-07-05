@@ -1,0 +1,41 @@
+# Ollama configuration
+# Default to a model that supports function calling
+model: llama3.2:function-calling
+base_url: http://localhost:11434
+temperature: 0.0
+timeout: 120
+
+# Model settings
+settings:
+  max_tokens: 2048
+  top_p: 0.9
+  top_k: 50
+  repeat_penalty: 1.1
+  seed: 42
+  # Additional parameters (optional)
+  # mirostat: 2
+  # mirostat_tau: 5.0
+  # mirostat_eta: 0.1
+  # tfs_z: 1.0
+
+# List of available models
+# The user can override the default model with the OLLAMA_MODEL environment variable or a command-line argument
+available_models:
+  # Models that support function calling
+  - llama3.2:function-calling
+  - phi4-mini:function-calling
+  # Standard models (may not support function calling)
+  - llama3.2
+  - llama3.1
+  - phi4-mini
+  - mistral
+  - qwen2.5
+
+# Fallback models (in order of priority)
+# Used when the primary model is unavailable
+fallback_models:
+  - llama3.2
+  - phi4-mini
+  - llama3.1
+  - mistral
+  - qwen2.5
