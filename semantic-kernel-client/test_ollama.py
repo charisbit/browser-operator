@@ -3,6 +3,7 @@
 Quick test to verify Ollama connection and basic functionality
 """
 
+import pytest
 import asyncio
 import logging
 from semantic_kernel import Kernel
@@ -12,6 +13,7 @@ from ollama_service import create_ollama_service
 
 logging.basicConfig(level=logging.INFO)
 
+@pytest.mark.asyncio
 async def test_ollama():
     print("Testing Ollama connection...")
     

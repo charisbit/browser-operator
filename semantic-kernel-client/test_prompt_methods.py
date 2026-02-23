@@ -3,6 +3,7 @@
 Simple test to verify the correct way to invoke prompts in Semantic Kernel
 """
 
+import pytest
 import asyncio
 from semantic_kernel import Kernel
 from semantic_kernel.contents.chat_history import ChatHistory
@@ -12,6 +13,7 @@ from semantic_kernel.functions import kernel_function
 from semantic_kernel.functions.kernel_arguments import KernelArguments
 from ollama_service import OllamaChatCompletion
 
+@pytest.mark.asyncio
 async def test_prompt_invocation():
     print("Testing prompt invocation methods...")
     

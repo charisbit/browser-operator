@@ -1,6 +1,7 @@
 """
 Test function calling functionality
 """
+import pytest
 import asyncio
 import logging
 from semantic_kernel import Kernel
@@ -17,6 +18,7 @@ from mcp_integration import create_playwright_plugin
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+@pytest.mark.asyncio
 async def test_function_calling(model: str = "llama3.2:function-calling"):
     """Tests the function calling capability"""
     
@@ -192,6 +194,7 @@ async def test_function_calling(model: str = "llama3.2:function-calling"):
     await chat_service.close()
     await playwright_plugin.close()
 
+@pytest.mark.asyncio
 async def test_raw_api_call():
     """Tests a raw API call"""
     

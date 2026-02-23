@@ -3,9 +3,11 @@
 Quickly verify the functools format fix
 """
 
+import pytest
 import asyncio
 from ollama_service import OllamaChatCompletion
 
+@pytest.mark.asyncio
 async def test_parse():
     service = OllamaChatCompletion()
     

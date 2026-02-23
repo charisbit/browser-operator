@@ -3,6 +3,7 @@
 Test functools format parsing
 """
 
+import pytest
 import asyncio
 import logging
 from semantic_kernel import Kernel
@@ -16,6 +17,7 @@ logging.basicConfig(
     datefmt='%H:%M:%S'
 )
 
+@pytest.mark.asyncio
 async def test_functools_parsing():
     print("🧪 Testing functools format parsing")
     print("=" * 60)

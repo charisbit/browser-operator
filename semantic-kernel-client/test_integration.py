@@ -2,6 +2,7 @@
 Integration test script
 Tests the full functionality of Playwright MCP + Ollama + Semantic Kernel
 """
+import pytest
 import asyncio
 import sys
 import os
