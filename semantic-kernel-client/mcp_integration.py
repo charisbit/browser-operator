@@ -22,7 +22,7 @@ class MCPTool:
 
 class MCPTransport:
     """MCP transport base class"""
-    async def send_request(self, request: Dict[str, Any]) -> Dict[str, Any]:
+    async def send_request(self, request: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         raise NotImplementedError
     
     async def close(self):
@@ -159,10 +159,10 @@ class SSETransport(MCPTransport):
             logger.error(f"SSE connection failed: {e}")
             return False
     
-    async def send_request(self, request: Dict[str, Any]) -> Dict[str, Any]:
+    async def send_request(self, request: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         """Sends a request via SSE"""
         # SSE request implementation
-        pass
+        return None
     
     async def close(self):
         """Closes the SSE connection"""
@@ -172,7 +172,7 @@ class SSETransport(MCPTransport):
 class PlaywrightMCPClient:
     """Playwright MCP client"""
     
-    def __init__(self, transport: Union[str, List[str]] = None):
+    def __init__(self, transport: Optional[Union[str, List[str]]] = None):
         """
         Initializes the MCP client
         
