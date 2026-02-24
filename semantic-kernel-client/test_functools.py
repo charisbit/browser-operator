@@ -73,14 +73,14 @@ async def test_functools_parsing():
             tools=tools
         )
         
-        print(f"\n📧 Final response:")
+        print("\n📧 Final response:")
         print(f"{response.content}")
         
         # Check the metadata
         if response.metadata:
             tool_calls = response.metadata.get("tool_calls", [])
             if tool_calls:
-                print(f"\n🔧 Detected tool calls:")
+                print("\n🔧 Detected tool calls:")
                 for call in tool_calls:
                     if "function" in call:
                         func = call["function"]

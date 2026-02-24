@@ -181,7 +181,7 @@ async def test_function_calling(model: str = "llama3.2:function-calling"):
             if response.metadata and "tool_calls" in response.metadata:
                 tool_calls = response.metadata["tool_calls"]
                 if tool_calls:
-                    print(f"\nDetected function calls:")
+                    print("\nDetected function calls:")
                     for call in tool_calls:
                         if "function" in call:
                             func = call["function"]

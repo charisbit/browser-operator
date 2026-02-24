@@ -144,7 +144,7 @@ class OllamaChatCompletion(ChatCompletionClientBase):
                     logger.info(f"Response data: {result}")
                     message = result.get("message", {})
                     
-                    logger.info(f"✅ Received response from Ollama")
+                    logger.info("✅ Received response from Ollama")
                     
                     # Extract content and tool calls
                     content = message.get("content", "")
@@ -241,7 +241,6 @@ class OllamaChatCompletion(ChatCompletionClientBase):
     
     async def _execute_tool_calls(self, tool_calls: List[Dict], kernel) -> List[Dict]:
         """Executes tool calls"""
-        from semantic_kernel.functions.kernel_arguments import KernelArguments
         
         results = []
         for call in tool_calls:
@@ -263,7 +262,7 @@ class OllamaChatCompletion(ChatCompletionClientBase):
                     logger.info(f"     ✅ Success: {str(result)[:100]}..." if len(str(result)) > 100 else f"     ✅ Success: {result}")
                 except Exception as e:
                     logger.error(f"  ❌ Function execution failed: {e}")
-                    logger.debug(f"     Error details: ", exc_info=True)
+                    logger.debug("     Error details: ", exc_info=True)
                     results.append({
                         "name": func_name,
                         "error": str(e)
