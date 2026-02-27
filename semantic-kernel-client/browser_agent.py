@@ -34,7 +34,7 @@ class TaskResult:
     output: str
     error: Optional[str] = None
     duration: float = 0.0
-    steps_completed: List[str] = None
+    steps_completed: Optional[List[str]] = None
 
 class BrowserAgent:
     """Intelligent browser automation agent"""
